@@ -46,8 +46,8 @@ app.post('/api/notes', (req, res) => {
   // req.body is available since we're using the body parsing middleware
  // if (tableArray.length < 5) {
     NoteArray.push(req.body);
-    data.push(req.body);
-    txt = JSON.stringify(data);  //reserialize to JSON
+   // data.push(req.body);
+    //txt = JSON.stringify(data);  //reserialize to JSON
     fs.writeFile(
 
         './db/db.json',
@@ -83,6 +83,19 @@ app.delete('/api/notes/:id', (req, res) => {
 
 }
 console.log(NoteArray);
+    fs.writeFile(
+
+      './db/db.json',
+
+      JSON.stringify(NoteArray),
+
+      function (err) {
+          if (err) {
+              console.error('Error sorry');
+          }
+      }
+    );
+    res.json(true);
 });
 
 // I added this below code so you could clear out the table while working with the functionality.
