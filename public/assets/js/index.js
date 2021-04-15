@@ -1,9 +1,10 @@
 let noteTitle;
 let noteText;
+let noteid;
 let saveNoteBtn;
 let newNoteBtn;
 let noteList;
-
+let LastGenID = 0;
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
@@ -65,7 +66,11 @@ const renderActiveNote = () => {
 };
 
 const handleNoteSave = () => {
+
+  LastGenID = LastGenID + 1;
+  alert(LastGenID);
   const newNote = {
+    id: LastGenID ,
     title: noteTitle.value,
     text: noteText.value,
   };
@@ -79,9 +84,11 @@ const handleNoteSave = () => {
 const handleNoteDelete = (e) => {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   e.stopPropagation();
-
   const note = e.target;
-  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
+  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id
+  const noteIdtext = JSON.parse(note.parentElement.getAttribute('data-note')).title;
+  const notedata = JSON.parse(note.parentElement.getAttribute('data-note'));
+  console.log(noteId);
 
   if (activeNote.id === noteId) {
     activeNote = {};
@@ -97,6 +104,10 @@ const handleNoteDelete = (e) => {
 const handleNoteView = (e) => {
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
+  console.log( "to view");
+  console.log( activeNote );
+
+  alert("To view");
   renderActiveNote();
 };
 
@@ -167,6 +178,29 @@ const renderNoteList = async (notes) => {
   }
 };
 
+// Render last is entered
+const NoteIdGenerator = async (notes) => {
+
+  let jsonNotes = await notes.json();
+  if (window.location.pathname === '/notes')
+   {
+
+  //  let last = jsonNotes.indexOf(jsonNotes.pop());
+    let last = jsonNotes.pop();
+    LastGenID = last.id;
+    alert(LastGenID);
+    console.log("Jasonlist return");
+    console.log(jsonNotes);
+    console.log(last.id);
+  } 
+    
+}
+
+  
+
+   
+    
+
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
@@ -177,4 +211,8 @@ if (window.location.pathname === '/notes') {
   noteText.addEventListener('keyup', handleRenderSaveBtn);
 }
 
+// Gets notes from the db and renders them to the sidebar
+const getLastGenId = () => getNotes().then(NoteIdGenerator);
+
+getLastGenId();
 getAndRenderNotes();

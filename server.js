@@ -56,7 +56,7 @@ app.post('/api/notes', (req, res) => {
     
         function (err) {
             if (err) {
-                console.error('Crap happens');
+                console.error('Error sorry');
             }
         }
     );
@@ -65,6 +65,24 @@ app.post('/api/notes', (req, res) => {
  //   waitingArray.push(req.body);
    // res.json(false);
   //}
+});
+
+//app.delete(function (req, res){
+
+//});
+
+app.delete('/api/notes/:id', (req, res) => {
+  const chosen = Number(req.params.id);
+  console.log(chosen);
+  for( var i = 0; i < NoteArray.length; i++){ 
+    console.log(NoteArray[i].id);
+    if ( NoteArray[i].id === chosen) { 
+      console.log("In the deletapisplice");
+       NoteArray.splice(i, 1); 
+    }
+
+}
+console.log(NoteArray);
 });
 
 // I added this below code so you could clear out the table while working with the functionality.
