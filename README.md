@@ -8,4 +8,4 @@ The assignment is to modify starter code to create an application called Note Ta
 ## Deployed Site
 deployed site below:
 
-[Deployed Site in Heroku](https://rocky-beyond-38291.herokuapp.com/notes)
+[Deployed Site in Heroku](https://rocky-beyond-38291.herokuapp.com/)
