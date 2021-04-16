@@ -2,7 +2,7 @@
 //Edited 04/14/2021
 //I created the routes for API and Sites on the server.js file.
 I was going then create the data route folder/files but deiced to leave it on the server.js for the purpose of
- this homework it should not impact me, Do to it meets the requested requirements .. Egon 04/14/2021
+ this homework it should not impact me, Do to it meets the requested requirements .. Egon 04/13/2021
 **UPDATE** I discussing with TA and are instructor I decided to add create the route folder and file to make sure get all credit
  and make sure considered I missing a requirement. Egon 04/16/2021
 
@@ -12,7 +12,7 @@ const express = require("express");
 const path = require("path");
 //array I used to work with json file
 
-// EXPRESS CONFIGURATION
+// EXPRESS CONFIGURATION  
 // This sets up the basic properties for our express server
 
 // Tells node that we are creating an "express" server
