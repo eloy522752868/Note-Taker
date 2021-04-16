@@ -1,3 +1,6 @@
+//modified by: Eloy Gonzalez
+//modified date: 04/08/2021
+//added changes to get delete to work and generate unique id and issue with adding new note and read-only attribute.
 let noteTitle;
 let noteText;
 let noteid;
@@ -25,7 +28,6 @@ const hide = (elem) => {
 
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
-
 const getNotes = () =>
   fetch('/api/notes', {
     method: 'GET',
@@ -42,7 +44,7 @@ const saveNote = (note) =>
     },
     body: JSON.stringify(note),
   });
-
+// id is passed to api ad parameter and then I remove from jason file.
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
@@ -53,7 +55,7 @@ const deleteNote = (id) =>
 
 const renderActiveNote = () => {
   hide(saveNoteBtn);
-
+  //had to fix an issue with a bug on else for adding new note. Had to remove readonly attribute to get it to work. equaling it to false did not work. Egonzalez 04/12/2021
   if (activeNote.id) {
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
@@ -62,19 +64,20 @@ const renderActiveNote = () => {
   } else {
     noteTitle.value = '';
     noteText.value = '';
+    noteTitle.removeAttribute('readonly');
+    noteText.removeAttribute('readonly');
   }
 };
 
 const handleNoteSave = () => {
-
+//added a global variable to get last id entered in json file and increase id number for new note.
   LastGenID = LastGenID + 1;
-  alert(LastGenID);
   const newNote = {
     id: LastGenID ,
     title: noteTitle.value,
     text: noteText.value,
   };
-  saveNote(newNote).then(() => {
+    saveNote(newNote).then(() => {
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -88,13 +91,12 @@ const handleNoteDelete = (e) => {
   const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id
   const noteIdtext = JSON.parse(note.parentElement.getAttribute('data-note')).title;
   const notedata = JSON.parse(note.parentElement.getAttribute('data-note'));
-  console.log(noteId);
 
   if (activeNote.id === noteId) {
     activeNote = {};
   }
 
-  deleteNote(noteId).then(() => {
+    deleteNote(noteId).then(() => {
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -104,10 +106,6 @@ const handleNoteDelete = (e) => {
 const handleNoteView = (e) => {
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
-  console.log( "to view");
-  console.log( activeNote );
-
-  alert("To view");
   renderActiveNote();
 };
 
@@ -178,28 +176,18 @@ const renderNoteList = async (notes) => {
   }
 };
 
-// Render last is entered
+//created this method to get last id in jsonfile. added a global variable to get last id entered in 
+//json file then is can be used to increase id number for new note.
 const NoteIdGenerator = async (notes) => {
 
   let jsonNotes = await notes.json();
   if (window.location.pathname === '/notes')
    {
-
-  //  let last = jsonNotes.indexOf(jsonNotes.pop());
     let last = jsonNotes.pop();
     LastGenID = last.id;
-    alert(LastGenID);
-    console.log("Jasonlist return");
-    console.log(jsonNotes);
-    console.log(last.id);
   } 
     
 }
-
-  
-
-   
-    
 
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
@@ -214,5 +202,6 @@ if (window.location.pathname === '/notes') {
 // Gets notes from the db and renders them to the sidebar
 const getLastGenId = () => getNotes().then(NoteIdGenerator);
 
+//Added to call getLastGenId method to get last id in jsonfile.
 getLastGenId();
 getAndRenderNotes();
